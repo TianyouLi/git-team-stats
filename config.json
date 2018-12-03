@@ -1,0 +1,17 @@
+{
+		repos:[
+				"v8": "https://github.com/v8/v8.git",
+		],
+
+		orgs: [
+				"Intel": "@intel.com",
+		],
+
+		members: [
+				"Jing Bao"     : "jing.bao@intel.com",
+				"Yolanda Chen" : "yolanda.chen@intel.com",
+				"Jie Pan"      : "jie.pan@intel.com",
+				"Tao Pan"      : "tao.pan@intel.com",
+				"Shiyu Zhang"  : "shiyu.zhang@intel.com",
+		],
+}

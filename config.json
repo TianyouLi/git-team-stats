@@ -1,17 +1,22 @@
 {
-		repos:[
-				"v8": "https://github.com/v8/v8.git",
-		],
+		"repos":{
+				"v8": "https://github.com/v8/v8.git"
+		},
 
-		orgs: [
-				"Intel": "@intel.com",
-		],
+		"orgs": {
+				"Intel": "@intel.com"
+		},
 
-		members: [
-				"Jing Bao"     : "jing.bao@intel.com",
-				"Yolanda Chen" : "yolanda.chen@intel.com",
-				"Jie Pan"      : "jie.pan@intel.com",
-				"Tao Pan"      : "tao.pan@intel.com",
-				"Shiyu Zhang"  : "shiyu.zhang@intel.com",
-		],
+		"members": {
+				"Tianyou Li"     : "tianyou.li@intel.com"
+				, "Pan Deng"     : "pan.deng@intel.com"
+				, "Jing Bao"     : "jing.bao@intel.com"
+				, "Yolanda Chen" : "yolanda.chen@intel.com"
+				, "Jie Pan"      : "jie.pan@intel.com"
+				, "Tao Pan"      : "tao.pan@intel.com"
+				, "Shiyu Zhang"  : "shiyu.zhang@intel.com"
+				, "Chunyang Dai" : "chunyang.dai@intel.com"
+				, "Zhengxing Li" : "zhengxing.li@intel.com"
+				, "Weiliang Lin" : "weiliang.lin@intel.com"
+		}
 }

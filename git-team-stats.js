@@ -1,6 +1,7 @@
-var fs  = require('fs');
-var git = require('nodegit');
-var log = require('gitlog');
+var fs   = require('fs');
+var git  = require('nodegit');
+var log  = require('gitlog');
+var date = require('date-and-time');
 
 var config = require('./config.json');
 
@@ -10,7 +11,6 @@ var cloneActions = Object.keys(config.repos).map(
 						var dir = repo;
 						var url = config.repos[repo];
 						
-						console.log("clone repo " + url + " into " + dir);
 						git.Clone(url, dir);
 						
 						resolve(dir);
@@ -51,8 +51,26 @@ var repoAuthorCommitsActions = Promise.all(cloneActions).then(repos => {
 		repoAuthorCommitsActions.map( repoAuthorCommits => {
 				Promise.all(repoAuthorCommits.authorCommitsActions).then(authorsCommits => {
 						authorsCommits.map(authorCommits => {
-								console.log(authorCommits.author);
-								console.log(authorCommits.commits);
+								authorCommits.total = authorCommits.commits.length;
+								authorCommits.commits.map(commit => {
+										var time = date.parse(commit.authorDate.substr(0,19), 'YYYY-MM-DD HH:mm:ss');
+										if (authorCommits.timeline == null) {
+												authorCommits.timeline = {};
+										}
+										if (authorCommits.timeline[time.getFullYear()] == null) {
+												authorCommits.timeline[time.getFullYear()] = {};
+										}
+										
+										if (authorCommits.timeline[time.getFullYear()][time.getMonth()] == null) {
+												authorCommits.timeline[time.getFullYear()][time.getMonth()] = 0;
+										}
+
+										authorCommits.timeline[time.getFullYear()][time.getMonth()] +=1;
+								});
+
+								delete authorCommits.commits;
+								
+								console.log(authorCommits);
 						});
 				});
 		});

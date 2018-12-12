@@ -39,7 +39,7 @@ var findCommitsByAuthor = (repo, author) => {
 		});
 };
 
-var repoAuthorCommitsActions = Promise.all(cloneActions).then(repos => {
+Promise.all(cloneActions).then(repos => {
 		return repos.map( repo => {
 				var authorCommitsActions = Object.values(config.members).map( author => {
 						return findCommitsByAuthor(repo, author);
@@ -47,33 +47,44 @@ var repoAuthorCommitsActions = Promise.all(cloneActions).then(repos => {
 
 				return {repo, authorCommitsActions};
 		});
-}).then(repoAuthorCommitsActions => {
-		repoAuthorCommitsActions.map( repoAuthorCommits => {
-				Promise.all(repoAuthorCommits.authorCommitsActions).then(authorsCommits => {
-						authorsCommits.map(authorCommits => {
-								authorCommits.total = authorCommits.commits.length;
-								authorCommits.commits.map(commit => {
-										var time = date.parse(commit.authorDate.substr(0,19), 'YYYY-MM-DD HH:mm:ss');
-										if (authorCommits.timeline == null) {
-												authorCommits.timeline = {};
-										}
-										if (authorCommits.timeline[time.getFullYear()] == null) {
-												authorCommits.timeline[time.getFullYear()] = {};
-										}
-										
-										if (authorCommits.timeline[time.getFullYear()][time.getMonth()] == null) {
-												authorCommits.timeline[time.getFullYear()][time.getMonth()] = 0;
-										}
+}).then(async repoAuthorCommitsActions => {
+		authorCommitsSummary = {};
+		
+		for (let repoAuthorCommits of repoAuthorCommitsActions) {
+				authorCommitsSummary[repoAuthorCommits.repo] = [];
+				
+				let authorsCommits = await Promise.all(repoAuthorCommits.authorCommitsActions);
 
-										authorCommits.timeline[time.getFullYear()][time.getMonth()] +=1;
-								});
+				for (let authorCommits of authorsCommits) {
+						authorCommits.total = authorCommits.commits.length;
 
-								delete authorCommits.commits;
+						for (let commit of authorCommits.commits) {
+								var time = date.parse(commit.authorDate.substr(0,19), 'YYYY-MM-DD HH:mm:ss');
+								if (authorCommits.timeline == null) {
+										authorCommits.timeline = {};
+								}
+								if (authorCommits.timeline[time.getFullYear()] == null) {
+										authorCommits.timeline[time.getFullYear()] = {};
+								}
 								
-								console.log(authorCommits);
-						});
-				});
-		});
+								if (authorCommits.timeline[time.getFullYear()][time.getMonth()] == null) {
+										authorCommits.timeline[time.getFullYear()][time.getMonth()] = 0;
+								}
+
+								authorCommits.timeline[time.getFullYear()][time.getMonth()] +=1;
+						}
+
+						delete authorCommits.commits;
+
+						authorCommitsSummary[repoAuthorCommits.repo].push(authorCommits);
+				}
+		}
+
+		return authorCommitsSummary;
+}).then(authorCommitsSummary => {
+		console.log(authorCommitsSummary);
 });
+
+
 
 

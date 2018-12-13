@@ -39,23 +39,31 @@ var findCommitsByAuthor = (repo, author) => {
 		});
 };
 
-Promise.all(cloneActions).then(repos => {
-		return repos.map( repo => {
-				var authorCommitsActions = Object.values(config.members).map( author => {
-						return findCommitsByAuthor(repo, author);
-				});
+Promise.all(cloneActions).then(async repos => {
+		let reposAuthorsCommits = [];
+		
+		for (let repo of repos) {
+				let repoAuthorsCommits = {};
+				repoAuthorsCommits.repo = repo;
+				repoAuthorsCommits.authorsCommits = [];
 
-				return {repo, authorCommitsActions};
-		});
-}).then(async repoAuthorCommitsActions => {
+				let authors = Object.values(config.members);
+				for (let author of authors) {
+						let authorCommits = await findCommitsByAuthor(repo, author);
+						repoAuthorsCommits.authorsCommits.push(authorCommits);
+				}
+
+				reposAuthorsCommits.push(repoAuthorsCommits);
+		}
+
+		return reposAuthorsCommits;
+}).then(reposAuthorsCommits => {
 		authorCommitsSummary = {};
 		
-		for (let repoAuthorCommits of repoAuthorCommitsActions) {
-				authorCommitsSummary[repoAuthorCommits.repo] = [];
+		for (let repoAuthorsCommits of reposAuthorsCommits) {
+				authorCommitsSummary[repoAuthorsCommits.repo] = [];
 				
-				let authorsCommits = await Promise.all(repoAuthorCommits.authorCommitsActions);
-
-				for (let authorCommits of authorsCommits) {
+				for (let authorCommits of repoAuthorsCommits.authorsCommits) {
 						authorCommits.total = authorCommits.commits.length;
 
 						for (let commit of authorCommits.commits) {
@@ -65,8 +73,7 @@ Promise.all(cloneActions).then(repos => {
 								}
 								if (authorCommits.timeline[time.getFullYear()] == null) {
 										authorCommits.timeline[time.getFullYear()] = {};
-								}
-								
+								}								
 								if (authorCommits.timeline[time.getFullYear()][time.getMonth()] == null) {
 										authorCommits.timeline[time.getFullYear()][time.getMonth()] = 0;
 								}
@@ -76,7 +83,7 @@ Promise.all(cloneActions).then(repos => {
 
 						delete authorCommits.commits;
 
-						authorCommitsSummary[repoAuthorCommits.repo].push(authorCommits);
+						authorCommitsSummary[repoAuthorsCommits.repo].push(authorCommits);
 				}
 		}
 

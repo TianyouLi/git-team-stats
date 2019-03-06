@@ -38,6 +38,8 @@
       "resolved": "https://registry.npmjs.org/bytes/-/bytes-3.0.0.tgz",
       "version": "3.0.0"
     },
+    "calendar-heatmap-graph": "0.0.14",
+    "canvas": "^2.2.0",
     "content-disposition": {
       "integrity": "sha1-DPaLud318r55YcOoUXjLhdunjLQ=",
       "resolved": "https://registry.npmjs.org/content-disposition/-/content-disposition-0.5.2.tgz",
@@ -58,7 +60,6 @@
       "resolved": "https://registry.npmjs.org/cookie-signature/-/cookie-signature-1.0.6.tgz",
       "version": "1.0.6"
     },
-    "d3-node": "^2.1.0",
     "date-and-time": "^0.6.3",
     "debug": {
       "integrity": "sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==",
@@ -189,6 +190,7 @@
       "resolved": "https://registry.npmjs.org/ipaddr.js/-/ipaddr.js-1.8.0.tgz",
       "version": "1.8.0"
     },
+    "jsdom": "^13.1.0",
     "media-typer": {
       "integrity": "sha1-hxDXrwqmJvj/+hzgAWhUUmMlV0g=",
       "resolved": "http://registry.npmjs.org/media-typer/-/media-typer-0.3.0.tgz",
